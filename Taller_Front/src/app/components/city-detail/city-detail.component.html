@@ -3,26 +3,33 @@
     <h5 class="mb-0">Detalle de Ciudad — {{ city.name }}, {{ city.country.name }}</h5>
   </div>
   <div class="card-body">
+    @if (loading) {
+      <div class="d-flex align-items-center gap-2 text-muted">
+        <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        <span>Cargando clima...</span>
+      </div>
+    }
 
-    <!-- TODO HU-03: Muestra un spinner mientras se carga el clima (usa la propiedad loading) -->
+    @if (!loading && weatherDetail) {
+      <div>
+        <p class="mb-2"><strong>Temperatura:</strong> {{ weatherDetail.temp_c }} °C</p>
+        <p class="mb-2"><strong>Condición:</strong> {{ weatherDetail.condition }}</p>
+        <p class="mb-0"><strong>Humedad:</strong> {{ weatherDetail.humidity }} %</p>
+      </div>
+    }
 
-    <!-- TODO HU-03: Muestra los datos de clima cuando estén disponibles:
-    - Temperatura: weatherDetail.temp_c °C
-    - Condición: weatherDetail.condition
-    - Humedad: weatherDetail.humidity %
-    -->
-
-    <!-- TODO HU-03: Muestra un mensaje "No hay datos de clima disponibles" cuando no haya datos -->
-
-    <p class="text-muted mb-0">Clima no disponible.</p>
-
+    @if (!loading && !weatherDetail) {
+      <p class="text-muted mb-0">No hay datos de clima disponibles.</p>
+    }
   </div>
 </div>
 
 <div class="card mt-3">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Historial de Clima</h5>
-    <button class="btn btn-sm btn-primary" (click)="saveWeather()">Guardar Clima Actual</button>
+    <button class="btn btn-sm btn-primary" [disabled]="loading || !weatherDetail" (click)="saveWeather()">
+      Guardar Clima Actual
+    </button>
   </div>
   <div class="card-body p-0">
 
